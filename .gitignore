@@ -1,0 +1,62 @@
+# PowerShell specific
+*.ps1.log
+*.ps1.error
+*.ps1xml.log
+
+# API Keys and Secrets
+.env
+*.key
+*.secret
+
+# Processing artifacts
+*_process/
+*_adjusted.md
+processed.log
+processing_errors.log
+
+# Debug files
+*.json.dump
+*.debug
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Obsidian specific
+.obsidian/
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
