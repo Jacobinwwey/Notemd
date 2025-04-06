@@ -1,177 +1,182 @@
-# PDF Processing and Knowledge Graph Integration System
-
-I'll create a comprehensive README.md file for your project and suggest an appropriate .gitignore file.
-
-## README.md
-
-
-# PDF Processing and Knowledge Graph Integration System
-
-A comprehensive PowerShell-based system for processing PDF-derived markdown files and integrating them into an Obsidian knowledge graph with intelligent concept linking.
+# Notemd - Advanced Knowledge Processing System
 
 ## Overview
+Notemd is a comprehensive knowledge management system designed for academic and technical documentation. It provides automated processing of PDF documents into structured Markdown with Obsidian integration, featuring:
 
-This system provides an automated pipeline for:
+- Multi-stage document processing pipeline
+- Intelligent knowledge point extraction
+- Automated backlink generation for knowledge graphs
+- Advanced duplicate detection algorithms
+- Multi-LLM provider support (DeepSeek/OpenAI/Anthropic)
 
-1. Processing markdown files extracted from PDFs
-2. Identifying and tagging core knowledge concepts with Obsidian backlinks
-3. Creating a structured knowledge graph from scientific/technical content
-4. Handling large batches of files with intelligent timeout management
+## System Components
 
-## Components
-
-The system consists of two main PowerShell scripts:
-
+### PowerShell Scripts
 - **Generate-Documentation.ps1**: Core processing engine for individual markdown files
-- **Process-PDFPipeline.ps1**: Batch processor with advanced file handling capabilities
+- **Process-PDFPipeline.ps1**: Batch processor with advanced file handling
+- **DeleteDuplicates.ps1**: Advanced duplicate detection and cleanup
 
-## Features
+### Python Modules
+- **process.py**: PDF processing core
+- **generate.py**: Documentation generation
+- **clean.py**: Duplicate detection and cleanup
 
-- **Intelligent Concept Tagging**: Automatically identifies and tags core concepts with Obsidian backlinks
-- **Content Preservation**: Maintains original document structure and formatting
-- **Batch Processing**: Handles large document collections with intelligent chunking
-- **Timeout Management**: Sophisticated scheduling with automatic resumption
-- **Duplicate Detection**: Eliminates redundant knowledge nodes
-- **Error Handling**: Robust error recovery and logging
+## Project Structure
+```
+Notemd-git/
+├── Notemd/                  # Core Python package
+│   ├── __init__.py          # Package initialization
+│   ├── clean.py             # Duplicate detection
+│   ├── generate.py          # Documentation generation
+│   ├── process.py           # PDF processing core
+│   └── scripts/             # PowerShell automation scripts
+├── requirements.txt         # Python dependencies
+├── setup.py                 # Installation script
+├── *.ps1                    # Processing scripts
+└── .env.example             # Configuration template
+```
 
-## Requirements
+## Installation & Setup
 
-- **PowerShell 7.2+** (required for advanced threading and JSON handling)
-- **Python 3.10+** (for document chunking)
+### Prerequisites
+- **PowerShell 7.2+** (required for advanced scripting)
+- **Python 3.10+** (for document processing)
+- **LLM API Key** (DeepSeek/OpenAI/Anthropic)
 - **Obsidian** (for knowledge graph visualization)
-- **DeepSeek API Key** (for AI-powered concept identification)
 
-## Installation
+### Step-by-Step Installation
+1. Clone repository:
+```bash
+git clone https://github.com/Jacobinwwey/Notemd.git
+cd Notemd
+```
 
-1. Clone this repository to your local machine
-2. Ensure PowerShell 7.2+ is installed
-3. Ensure Python 3.10+ is installed and accessible via PATH
-4. Set up your DeepSeek API key (see Configuration section)
-5. Create an Obsidian vault or identify an existing one for knowledge integration
+2. Create virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+pip install -e .
+```
+
+4. Configuration:
+```bash
+cp .env.example .env
+# Configure paths and API keys in .env
+```
+
+## Core Features
+
+### PDF Processing Pipeline
+- Converts PDF to clean Markdown with preserved structure
+- Intelligent chunking for large documents (3000 words/chunk)
+- Mathematical notation preservation
+- Automated header normalization
+
+### Knowledge Extraction
+- AI-powered concept identification (DeepSeek/OpenAI)
+- Obsidian backlink generation
+- Knowledge graph node creation
+- Technical terminology handling
+
+### Advanced Script Capabilities
+- **Batch Processing**: Automatic retries and timeout handling
+- **Error Recovery**: Robust logging and resume capabilities
+- **Duplicate Detection**: Symbol normalization and containment checks
+- **Scheduling**: Configurable processing intervals and cycles
 
 ## Configuration
 
-### API Key Setup
+### Environment Variables (.env)
+```ini
+# Required Paths
+KNOWLEDGE_BASE_PATH=/path/to/knowledge_base
+SEARCH_PATH=/path/to/search/files
 
-Set your DeepSeek API key as an environment variable:
+# LLM Configuration
+LLM_PROVIDER=deepseek
+DEEPSEEK_API_KEY=your_api_key
+DEEPSEEK_MODEL=deepseek-reasoner
 
-```powershell
-$env:DEEPSEEK_API_KEY = 'your-api-key-here'
+# Processing Parameters
+CHUNK_SIZE=3000          # Words per processing chunk
+TEMPERATURE=0.5          # AI response creativity (0.0-1.0)
+MAX_TOKENS=8192          # Maximum tokens per request
+
+# Scheduling (Process-PDFPipeline.ps1)
+START_DELAY_HOURS=0.000001
+TIMEOUT_HOURS=8
+CHECK_INTERVAL=30
+MAX_CYCLES=1000
 ```
 
-For persistent storage, add this to your PowerShell profile.
+## Usage Examples
 
-### Directory Structure
-
-The system expects the following directory structure:
-
-```
-/
-├── Process-PDFPipeline.ps1
-├── Generate-Documentation.ps1
-├── Knowledge/              # Knowledge base for Obsidian nodes
-└── [Your markdown files]   # Files to process (*.md)
-```
-
-### Configuration Parameters
-
-Both scripts contain configuration sections that can be modified:
-
-#### Generate-Documentation.ps1
-
-```powershell
-$DEEPSEEK_CONFIG = @{
-    Model           = "deepseek-reasoner"  # AI model to use
-    Temperature     = 0.5                  # Response creativity (0.0-1.0)
-    MaxTokens       = 8192                 # Maximum response length
-    # Additional parameters...
-}
-```
-
-#### Process-PDFPipeline.ps1
-
-```powershell
-$config = @{
-    ProcessSuffix   = "_process"           # Suffix for processing directories
-    KnowledgeBase   = ".\Knowledge"        # Path to knowledge base
-    ChunkSize       = 3000                 # Words per chunk for processing
-    # Additional parameters...
-}
-
-$SCHEDULE_CONFIG = @{
-    StartDelayHours = 3                    # Initial processing delay
-    TimeoutHours    = 8                    # Hours before timeout
-    # Additional parameters...
-}
-```
-
-## Usage
-
-### Basic Processing
-
-To process all markdown files in the current directory:
-
-```powershell
-.\Generate-Documentation.ps1
+### Single File Processing
+```bash
+notemd-process research_paper.pdf --output-dir ./knowledge_base
 ```
 
 ### Batch Processing
-
-To process all `full.md` files in the current directory and subdirectories:
-
 ```powershell
-.\Process-PDFPipeline.ps1
+.\Process-PDFPipeline.ps1 -InputDir ./papers -OutputDir ./knowledge
+```
+
+### Documentation Generation
+```bash
+notemd-generate --model deepseek-reasoner --temperature 0.7
 ```
 
 ### Obsidian Integration
+1. Open Obsidian and create/open a vault
+2. Add the knowledge base directory to your vault
+3. Navigate the automatically generated knowledge graph
 
-1. Open Obsidian
-2. Create or open a vault
-3. Add the `Knowledge` directory as a folder in your vault
-4. Navigate the automatically generated knowledge graph
+## Advanced Configuration
 
-## Processing Flow
+### Customizing AI Prompts
+Edit the `$structuredPrompt` variable in scripts to modify concept identification.
 
-1. **File Discovery**: System scans for markdown files to process
-2. **Validation**: Files are checked for valid headers and content
-3. **Chunking** (batch mode): Large files are split into manageable chunks
-4. **AI Processing**: DeepSeek API identifies core concepts
-5. **Backlink Insertion**: Core concepts are wrapped in Obsidian backlinks
-6. **Knowledge Node Creation**: Empty files are created for each concept
-7. **Deduplication**: Redundant concept files are eliminated
+### Extending LLM Support
+1. Add new provider in Process-PDFPipeline.ps1
+2. Implement API calls in generate.py
+3. Update configuration system
 
 ## Troubleshooting
 
 ### Common Issues
+1. **API Timeouts**: Increase timeout values in configuration
+2. **Encoding Errors**: Ensure UTF-8 file handling
+3. **Missing Backlinks**: Verify content contains identifiable concepts
+4. **Duplicate Detection**: Adjust similarity thresholds in clean.py
 
-- **API Connection Failures**: Verify your API key and internet connection
-- **Processing Timeouts**: Increase timeout values in configuration
-- **Missing Backlinks**: Check that your content contains identifiable concepts
+### Log Files
+- processing_errors.log - Detailed error information
+- processed.log - Completed file records
 
-### Logs
+## Development
 
-- **Processing Errors**: Check `processing_errors.log` for detailed error information
-- **Processed Files**: Review `processed.log` to see which files have been completed
+### Building from Source
+```bash
+python setup.py sdist bdist_wheel
+```
 
-## Advanced Usage
-
-### Customizing Prompts
-
-To modify how concepts are identified, edit the `$structuredPrompt` variable in the `Invoke-DeepseekRequest` function.
-
-### Scheduling
-
-The batch processor includes sophisticated scheduling capabilities:
-
-```powershell
-$SCHEDULE_CONFIG = @{
-    StartDelayHours = 3      # Delay processing start
-    TimeoutHours    = 8      # Hours before timeout
-    CheckInterval   = 30     # Seconds between checks
-    MaxCycles       = 1000   # Maximum processing cycles
-}
+### Testing
+```bash
+python -m pytest tests/
 ```
 
 ## License
+MIT License - See LICENSE for details
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Roadmap
+- [ ] Multi-language support
+- [ ] Enhanced mathematical processing
+- [ ] Plugin architecture
+- [ ] Web interface
+- [ ] Mobile app integration
