@@ -33,22 +33,17 @@ function Import-DotEnv {
 # Load environment variables
 Import-DotEnv
 
-# Configuration - require environment variables
-if (-not $env:KNOWLEDGE_BASE_PATH -or -not $env:SEARCH_PATH) {
-    Write-Error "Missing required environment variables. Please configure KNOWLEDGE_BASE_PATH and SEARCH_PATH in .env file"
-    exit 1
-}
-
+# Configuration with environment variable fallbacks
 $config = @{
     BaseDir         = (Get-Location).Path
     ProcessSuffix   = "_process"
-    KnowledgeBase   = $env:KNOWLEDGE_BASE_PATH
+    KnowledgeBase   = $env:KNOWLEDGE_BASE_PATH ?? "E:\Knowledge\Study\dp_know\undo"
     PythonExe       = $env:PYTHON_EXE ?? "python.exe"
     ChunkSize       = [int]($env:CHUNK_SIZE ?? 3000)
     Temperature     = [double]($env:TEMPERATURE ?? 0.5)
     MaxTokens       = [int]($env:MAX_TOKENS ?? 8192)
     ProcessedLog    = "processed.log"
-    SearchPath      = $env:SEARCH_PATH
+    SearchPath      = $env:SEARCH_PATH ?? "E:\Knowledge\Study\dp_know"
 }
 
 $SCHEDULE_CONFIG = @{

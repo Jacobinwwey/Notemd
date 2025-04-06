@@ -22,11 +22,7 @@ $SCHEDULE_CONFIG = @{
     CheckInterval   = 30
     FailOnTimeout   = $true
 }
-if (-not $env:DEEPSEEK_API_KEY) {
-    Write-Error "Missing required environment variable DEEPSEEK_API_KEY. Please configure in .env file"
-    exit 1
-}
-
+$env:DEEPSEEK_API_KEY = 'sk-8db844aa74c747a38e2b2359a1ceebe1'
 $DEEPSEEK_CONFIG = @{
     BaseURL         = "https://api.deepseek.com/v1/chat/completions"
     Model           = "deepseek-reasoner"

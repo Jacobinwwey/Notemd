@@ -1,0 +1,24 @@
+# Python Dependencies
+requests>=2.28.0
+pathlib>=1.0.1
+regex>=2022.3.15
+
+# PowerShell Dependencies
+# PowerShell 7.2+ (pwsh)
+
+# System Requirements
+# Python 3.10+
+
+# API Keys Required
+# - DeepSeek API key (default)
+# - OpenAI API key (optional)
+# - Anthropic API key (optional)
+# - Google API key (optional)
+# - Mistral API key (optional)
+# - Azure OpenAI API key (optional)
+
+# Environment Setup
+# 1. Install Python 3.10+ and add to PATH
+# 2. Install PowerShell 7.2+ (pwsh)
+# 3. Install Python dependencies: pip install -r requirements.txt
+# 4. Configure .env file with appropriate API keys

@@ -1,62 +1,68 @@
-# PowerShell specific
-*.ps1.log
-*.ps1.error
-*.ps1xml.log
-
-# API Keys and Secrets
-.env
-*.key
-*.secret
-
-# Processing artifacts
-*_process/
-*_adjusted.md
-processed.log
-processing_errors.log
-
-# Debug files
-*.json.dump
-*.debug
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
 
 # Python artifacts
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
 *.egg-info/
-.installed.cfg
 *.egg
+dist/
+build/
+*.mo
+*.pot
 
-# Obsidian specific
-.obsidian/
+# Virtual environment
+venv/
+env/
+ENV/
 
-# OS specific files
+# Log files
+*.log
+*.logs
+*.log.*
+logs/
+
+# System files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# PowerShell temporary files
+*.ps1~
+*.psm1~
+
+# Obsidian files
+.obsidian/
+
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Documentation
+_build/
+docs/_build/
+
+# Large files
+*.pdf
+*.zip
+*.exe
+*.dll
+*.bin
+
+# Temporary files
+*.tmp
+*.temp
+*~

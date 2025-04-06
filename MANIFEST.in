@@ -1,0 +1,4 @@
+include README.md
+include install.md
+recursive-include Notemd/scripts *.ps1
+include env/downloads/*
