@@ -262,6 +262,26 @@ function Invoke-LLMProcessing {
         [string]$ProcessDir
     )
 
+    # Check and install required Python packages
+    Write-Host "Checking for required Python packages..." -ForegroundColor Cyan
+    $requiredPackages = @("requests")
+    
+    foreach ($package in $requiredPackages) {
+        try {
+            $checkResult = & $config.PythonExe -c "import $package; print('Package $package is installed')"
+            if (-not $?) {
+                Write-Host "Installing missing Python package: $package" -ForegroundColor Yellow
+                & $config.PythonExe -m pip install $package
+                if (-not $?) { throw "Failed to install $package" }
+            }
+        }
+        catch {
+            Write-Host "Installing missing Python package: $package" -ForegroundColor Yellow
+            & $config.PythonExe -m pip install $package
+            if (-not $?) { throw "Failed to install $package. Error: $_" }
+        }
+    }
+
     $modifiedScript = Get-Content 'Generate-Documentation.ps1' -Raw
     
     # Update configuration in the script
@@ -528,11 +548,11 @@ if __name__ == "__main__":
         & $config.PythonExe $tempPyScript
         if (-not $?) { throw "LLM processing failed with exit code $LASTEXITCODE" }
         
-        # Rename processed files to match expected format for merging
-        Get-ChildItem -Path $ProcessDir -Filter "processed_chunk_*.md" | ForEach-Object {
-            $newName = $_.Name -replace "^processed_", ""
-            Rename-Item -Path $_.FullName -NewName $newName -Force
-        }
+        # 注释掉重命名操作，保留processed_chunk_*.md文件
+        # Get-ChildItem -Path $ProcessDir -Filter "processed_chunk_*.md" | ForEach-Object {
+        #     $newName = $_.Name -replace "^processed_", ""
+        #     Rename-Item -Path $_.FullName -NewName $newName -Force
+        # }
     }
     catch {
         Write-Host "Error in LLM processing: $_" -ForegroundColor Red
@@ -556,7 +576,8 @@ function Merge-Files {
     $headerPattern = "^# $([regex]::Escape($baseName))$"
     $isFirstChunk = $true
     
-    Get-ChildItem $ProcessDir\*.md | 
+    # 修改这里，使用processed_chunk_*.md文件进行合并
+    Get-ChildItem $ProcessDir\processed_chunk_*.md | 
         Sort-Object { [int][regex]::Match($_.Name, '\d+').Value } |
         ForEach-Object {
             $content = Get-Content $_.FullName -Encoding UTF8
